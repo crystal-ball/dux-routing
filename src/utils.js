@@ -36,7 +36,7 @@ export function createURI(route, routeParams = {}, searchParams = {}) {
  * Matches the pathname against the route.
  * @param {string} pathname Path that will be matched against, eg `/tools/dux-routing`
  * @param {string} route Path pattern that will be matched with, eg `tools/:library`
- * @returns {Object|null} Match details on match or null
+ * @returns {?import('./types').MatchDetails} Match details on match or null
  */
 export function matchRoute(pathname, route) {
   if (!matchRegexRoutesCache[route]) {
@@ -63,6 +63,29 @@ export function parseSearchParams(search = '') {
     parsedSearchParams[key] = value
   }
   return parsedSearchParams
+}
+
+/**
+ * Finds and returns the first matched route object with match details
+ * @param {string} pathname
+ * @param {Array<import('./types').RouteConfig>} routes
+ */
+export function routeSwitch(pathname, routes) {
+  /** @type {import('./types').MatchDetails} */
+  let matchDetails
+
+  const matched = routes.find(({ route }) => {
+    const match = matchRoute(pathname, route)
+    matchDetails = match
+    return match
+  })
+
+  return matched
+    ? {
+        ...matched,
+        ...matchDetails,
+      }
+    : null
 }
 
 /**

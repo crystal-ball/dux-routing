@@ -1,4 +1,10 @@
-import { createURI, matchRoute, parseSearchParams, stringifySearchParams } from './utils'
+import {
+  createURI,
+  matchRoute,
+  parseSearchParams,
+  routeSwitch,
+  stringifySearchParams,
+} from './utils'
 
 describe('createURI()', () => {
   test('when passed a simple route, then the correct uri is created', () => {
@@ -72,6 +78,46 @@ describe('parseSearchParams()', () => {
     delete global.URLSearchParams
     expect(parseSearchParams('?hecka=rad')).toEqual({})
     global.URLSearchParams = URLSearchParams
+  })
+})
+
+describe('routeSwitch()', () => {
+  test('when called, then it returns the first match', () => {
+    const testRoutes = [
+      { route: '/hecka/rad', correct: false },
+      { route: '/package/dux-routing', correct: true },
+      { route: '/src/utils', correct: false },
+    ]
+
+    expect(routeSwitch('/package/dux-routing', testRoutes)).toEqual({
+      correct: true,
+      params: {},
+      pathname: '/package/dux-routing',
+      route: '/package/dux-routing',
+    })
+  })
+
+  test('when called with a route with params, then the params are parsed', () => {
+    expect(
+      routeSwitch('/rad/%40crystal-ball%2Fwebpack-base', [
+        { route: '/rad/:package', status: 'hecka' },
+      ]),
+    ).toEqual({
+      params: { package: '@crystal-ball/webpack-base' },
+      pathname: '/rad/%40crystal-ball%2Fwebpack-base',
+      route: '/rad/:package',
+      status: 'hecka',
+    })
+  })
+
+  test('when called with no matches, then it returns null', () => {
+    const testRoutes = [
+      { route: '/hecka/rad', correct: false },
+      { route: '/package/dux-routing', correct: false },
+      { route: '/src/utils', correct: false },
+    ]
+
+    expect(routeSwitch('/app/screen', testRoutes)).toBe(null)
   })
 })
 

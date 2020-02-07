@@ -3,10 +3,12 @@ import { parseSearchParams, stringifySearchParams } from './utils'
 
 // --- Action types ---------------------------------------
 
+/** @type {import('./types').PathNameUpdated} */
 export const PATHNAME_UPDATED = 'ROUTING/PATHNAME_UPDATED'
 
 // --- Action creators ------------------------------------
 
+/** @type {import('./types').updatePathname} */
 export function updatePathname({
   method = 'pushState',
   pathname,
@@ -26,14 +28,18 @@ export function updatePathname({
 
 // --- Reducer --------------------------------------------
 
+/** @type {import('./types').RoutingState} */
 const initialState = {
-  /** The value of the application location.pathname */
   pathname: window?.location?.pathname || '/',
-  /** Structured key value map of current search params */
   searchParams: parseSearchParams(window?.location?.search),
 }
 
 /* eslint-disable default-param-last */
+/**
+ * @param {import('./types').RoutingState} state
+ * @param {*} action
+ * @returns {import('./types').RoutingState}
+ */
 export default function reducer(state = initialState, action) {
   if (action.type === PATHNAME_UPDATED) {
     const { pathname, searchParams } = action.payload
@@ -57,8 +63,11 @@ export default function reducer(state = initialState, action) {
 
 // --- Selectors ------------------------------------------
 
+/** @returns {string} */
 export const getPathname = state => state.routing.pathname
+/** @returns {string} */
 export const getSearchParams = state => state.routing.searchParams
+/** @returns {import('./types').RoutingState} */
 export const getRouting = state => state.routing
 
 // --- Middleware -----------------------------------------
