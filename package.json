@@ -2,7 +2,10 @@
   "name": "dux-routing",
   "version": "0.0.0",
   "description": "All in Redux routing solution",
-  "main": "index.js",
+  "main": "lib/index.js",
+  "module": "es/index.js",
+  "esnext": "esnext/index.js",
+  "sideEffects": false,
   "keywords": [
     "redux",
     "routing"
@@ -14,7 +17,7 @@
   "scripts": {
     "test": "npm run test:lint && npm run test:unit",
     "test:lint": "NODE_ENV=test eslint --format=pretty src",
-    "test:unit": "BABEL_ENV=test NODE_ENV=test jest",
+    "test:unit": "BABEL_ENV=test NODE_ENV=test jest src",
     "test:watch": "BABEL_ENV=test NODE_ENV=test JEST_NOTIFY=true jest --watch",
     "format": "prettier --write '*.{js,json,md}' '**/*.{js,json,md,mdx,scss}' !CHANGELOG.md",
     "prepublishOnly": "npm run clean && npm run js",

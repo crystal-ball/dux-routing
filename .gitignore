@@ -4,7 +4,9 @@
 node_modules
 
 # Build output
-dist
+es
+esnext
+lib
 
 # Test output
 coverage

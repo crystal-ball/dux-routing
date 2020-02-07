@@ -5,7 +5,7 @@ module.exports = {
      * doesn't support ESModules and operates directly on source code.
      */
     test: {
-      presets: ['@babel/preset-env', '@babel/preset-react'],
+      presets: ['@babel/preset-env'],
     },
 
     // Publish targets
@@ -13,7 +13,7 @@ module.exports = {
 
     // CommonJS - ES5 syntax with commonJS modules
     common: {
-      presets: ['@babel/preset-env', '@babel/preset-react'],
+      presets: ['@babel/preset-env'],
       plugins: [
         '@babel/plugin-transform-modules-commonjs',
         [
@@ -25,7 +25,7 @@ module.exports = {
     },
     // ESM - ES5 syntax with ESModules
     esmodules: {
-      presets: [['@babel/preset-env', { modules: false }], '@babel/preset-react'],
+      presets: [['@babel/preset-env', { modules: false }]],
       plugins: [
         [
           '@babel/plugin-transform-runtime',
@@ -39,7 +39,6 @@ module.exports = {
     },
     // Next - Transpiled to stage 4 for package.esnext
     next: {
-      presets: ['@babel/preset-react'],
       plugins: [
         [
           '@babel/plugin-transform-runtime',
