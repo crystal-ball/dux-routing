@@ -13,7 +13,4 @@ module.exports = {
   collectCoverage: true,
   coverageReporters: ['text-summary'],
   collectCoverageFrom: ['src/**/*.js', '!**/*.stories.js'],
-
-  // Pre/Post test framework setup configs
-  setupFilesAfterEnv: ['<rootDir>/test/jest-extend.js'],
 }

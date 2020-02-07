@@ -7,6 +7,22 @@
 import { match } from 'path-to-regexp'
 
 /**
+ * Matches the pathname against the route.
+ * @param {string} pathname Path that will be matched against, eg `/tools/dux-routing`
+ * @param {string} route Path pattern that will be matched with, eg `tools/:library`
+ * @returns {Object|null} Match details on match or null
+ */
+export function matchRoute(pathname, route) {
+  if (!regexRoutesCache[route]) {
+    regexRoutesCache[route] = match(route, { decode: decodeURIComponent })
+  }
+
+  const pathMatch = regexRoutesCache[route](pathname)
+
+  return pathMatch ? { params: pathMatch.params, pathname, route } : null
+}
+
+/**
  * Cache holds the paths that have been parsed to regex. This is ok to share
  * across component instances because the same path string can always be
  * matched against the same regex.
@@ -44,22 +60,6 @@ export function stringifySearchParams(params = {}) {
   })
   const stringifiedParams = searchParams.toString()
   return stringifiedParams ? `?${stringifiedParams}` : ''
-}
-
-/**
- * Matches the pathname against the route.
- * @param {string} pathname Path that will be matched against, eg `/tools/dux-routing`
- * @param {string} route Path pattern that will be matched with, eg `tools/:library`
- * @returns {Object|null} Match details on match or null
- */
-export function matchRoute(pathname, route) {
-  if (!regexRoutesCache[route]) {
-    regexRoutesCache[route] = match(route, { decode: decodeURIComponent })
-  }
-
-  const pathMatch = regexRoutesCache[route](pathname)
-
-  return pathMatch ? { params: pathMatch.params, pathname, route } : null
 }
 
 /*

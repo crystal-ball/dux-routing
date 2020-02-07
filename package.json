@@ -35,6 +35,7 @@
     "@babel/core": "7.8.4",
     "@babel/plugin-transform-modules-commonjs": "7.8.3",
     "@babel/plugin-transform-runtime": "7.8.3",
+    "@babel/preset-env": "7.8.4",
     "@babel/preset-react": "7.8.3",
     "@crystal-ball/commitizen-base": "2.3.0",
     "@crystal-ball/prettier-base": "1.6.0",
