@@ -1,3 +1,3 @@
-export * from "./Switch";
-export * from "./redux";
-export * from "./utils";
+export * from './Switch'
+export * from './redux'
+export * from './utils'

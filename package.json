@@ -12,18 +12,47 @@
   ],
   "license": "ISC",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "npm run test:lint && npm run test:unit",
+    "test:lint": "NODE_ENV=test eslint --format=pretty src",
+    "test:unit": "BABEL_ENV=test NODE_ENV=test jest",
+    "test:watch": "BABEL_ENV=test NODE_ENV=test JEST_NOTIFY=true jest --watch",
+    "format": "prettier --write '*.{js,json,md}' '**/*.{js,json,md,mdx,scss}' !CHANGELOG.md",
+    "prepublishOnly": "npm run clean && npm run js",
+    "postpublish": "npm run clean",
+    "js": "npm run js:commonjs && npm run js:esmodules && npm run js:esnext",
+    "js:commonjs": "BABEL_ENV=common babel src --out-dir lib --ignore '**/*.spec.js','**/*.stories.js'",
+    "js:esmodules": "BABEL_ENV=esmodules babel src --out-dir es --ignore **/*.spec.js --ignore  '**/*.spec.js','**/*.stories.js'",
+    "js:esnext": "BABEL_ENV=next babel src --out-dir esnext --ignore **/*.spec.js --ignore  '**/*.spec.js','**/*.stories.js'",
+    "clean": "rm -rf dist monitor lib es esnext"
   },
   "dependencies": {
+    "@babel/runtime": "7",
     "path-to-regexp": "6",
     "react-redux": "7"
   },
   "devDependencies": {
+    "@babel/cli": "7.8.4",
+    "@babel/core": "7.8.4",
+    "@babel/plugin-transform-modules-commonjs": "7.8.3",
+    "@babel/plugin-transform-runtime": "7.8.3",
+    "@babel/preset-react": "7.8.3",
     "@crystal-ball/commitizen-base": "2.3.0",
     "@crystal-ball/prettier-base": "1.6.0",
-    "@crystal-ball/webpack-base": "7.12.0",
+    "@testing-library/react": "9.4.0",
     "jest": "25.1.0",
     "react": "16.12.0",
-    "react-dom": "16.12.0"
-  }
+    "react-dom": "16.12.0",
+    "typescript": "3.7.5"
+  },
+  "config": {
+    "commitizen": {
+      "path": "@crystal-ball/commitizen-base"
+    }
+  },
+  "husky": {
+    "hooks": {
+      "prepare-commit-msg": "exec < /dev/tty && git cz --hook || true"
+    }
+  },
+  "prettier": "@crystal-ball/prettier-base"
 }

@@ -4,30 +4,30 @@
  * @module
  */
 
-import { match } from "path-to-regexp";
+import { match } from 'path-to-regexp'
 
 /**
  * Cache holds the paths that have been parsed to regex. This is ok to share
  * across component instances because the same path string can always be
  * matched against the same regex.
  */
-const regexRoutesCache = {};
+const regexRoutesCache = {}
 
 /**
  * Parses a search string into a key, value object set.
  * @param {string} search Search string
  * @returns {Object} Structured search params
  */
-export function parseSearchParams(search = "") {
-  if (!URLSearchParams) return {};
+export function parseSearchParams(search = '') {
+  if (!URLSearchParams) return {}
 
-  const parsedSearchParams = {};
-  const searchParams = new URLSearchParams(search);
+  const parsedSearchParams = {}
+  const searchParams = new URLSearchParams(search)
 
   for (const [key, value] of searchParams.entries()) {
-    parsedSearchParams[key] = value;
+    parsedSearchParams[key] = value
   }
-  return parsedSearchParams;
+  return parsedSearchParams
 }
 
 /**
@@ -36,14 +36,14 @@ export function parseSearchParams(search = "") {
  * @returns {string} Formatted search string
  */
 export function stringifySearchParams(params = {}) {
-  if (!URLSearchParams) return "";
-  const searchParams = new URLSearchParams();
+  if (!URLSearchParams) return ''
+  const searchParams = new URLSearchParams()
 
   Object.keys(params).forEach(key => {
-    searchParams.set(key, params[key]);
-  });
-  const stringifiedParams = searchParams.toString();
-  return stringifiedParams ? `?${stringifiedParams}` : "";
+    searchParams.set(key, params[key])
+  })
+  const stringifiedParams = searchParams.toString()
+  return stringifiedParams ? `?${stringifiedParams}` : ''
 }
 
 /**
@@ -54,12 +54,12 @@ export function stringifySearchParams(params = {}) {
  */
 export function matchRoute(pathname, route) {
   if (!regexRoutesCache[route]) {
-    regexRoutesCache[route] = match(route, { decode: decodeURIComponent });
+    regexRoutesCache[route] = match(route, { decode: decodeURIComponent })
   }
 
-  const pathMatch = regexRoutesCache[route](pathname);
+  const pathMatch = regexRoutesCache[route](pathname)
 
-  return pathMatch ? { params: pathMatch.params, pathname, route } : null;
+  return pathMatch ? { params: pathMatch.params, pathname, route } : null
 }
 
 /*

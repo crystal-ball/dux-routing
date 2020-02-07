@@ -1,107 +1,99 @@
 // @ts-check
-import { parseSearchParams, stringifySearchParams } from "./utils";
+import { parseSearchParams, stringifySearchParams } from './utils'
 
 // --- Action types ---------------------------------------
 
-export const PATHNAME_CHANGED = "ROUTING/PATHNAME_CHANGED";
+export const PATHNAME_UPDATED = 'ROUTING/PATHNAME_UPDATED'
 
 // --- Action creators ------------------------------------
 
-export function changePathname({
-  method = "pushState",
+export function updatePathname({
+  method = 'pushState',
   pathname,
   resetScroll = true,
-  searchParams = {}
+  searchParams = {},
 }) {
   return {
-    type: PATHNAME_CHANGED,
+    type: PATHNAME_UPDATED,
     payload: {
       method,
       pathname,
       resetScroll,
-      searchParams
-    }
-  };
+      searchParams,
+    },
+  }
 }
 
 // --- Reducer --------------------------------------------
 
 const initialState = {
   /** The value of the application location.pathname */
-  pathname: window?.location?.pathname || "/",
+  pathname: window?.location?.pathname || '/',
   /** Structured key value map of current search params */
-  searchParams: parseSearchParams(window?.location?.search)
-};
+  searchParams: parseSearchParams(window?.location?.search),
+}
 
 /* eslint-disable default-param-last */
 export default function reducer(state = initialState, action) {
-  if (action.type === PATHNAME_CHANGED) {
-    const { pathname, searchParams } = action.payload;
+  if (action.type === PATHNAME_UPDATED) {
+    const { pathname, searchParams } = action.payload
 
     return {
       pathname,
-      searchParams
-    };
+      searchParams,
+    }
   }
 
   if (action.meta?.searchParams) {
     return {
       pathname: state.pathname,
-      searchParams: action.meta.searchParams
-    };
+      searchParams: action.meta.searchParams,
+    }
   }
 
-  return state;
+  return state
 }
 /* eslint-disable default-param-last */
 
 // --- Selectors ------------------------------------------
 
-export const getPathname = state => state.routing.pathname;
-export const getSearchParams = state => state.routing.searchParams;
-export const getRouting = state => state.routing;
+export const getPathname = state => state.routing.pathname
+export const getSearchParams = state => state.routing.searchParams
+export const getRouting = state => state.routing
 
 // --- Middleware -----------------------------------------
 
 export const routingMiddleware = store => next => action => {
   // Handle updating the url to match pathname changes
-  if (action.type === PATHNAME_CHANGED) {
-    const { method, pathname, resetScroll, searchParams } = action.payload;
+  if (action.type === PATHNAME_UPDATED) {
+    const { method, pathname, resetScroll, searchParams } = action.payload
 
-    window.history[method](
-      null,
-      "",
-      pathname + stringifySearchParams(searchParams)
-    );
+    window.history[method](null, '', pathname + stringifySearchParams(searchParams))
 
     // Match browser default behavior by resetting scroll to top of body
-    if (resetScroll) document.body.scrollTop = 0;
+    if (resetScroll) document.body.scrollTop = 0
   }
 
   // Handle updating the url to match search param changes
   if (action.meta?.searchParams) {
-    const { method = "replaceState", searchParams } = action.meta;
-    const pathname = getPathname(store.getState());
+    const { method = 'replaceState', searchParams } = action.meta
+    const pathname = getPathname(store.getState())
 
-    window.history[method](
-      null,
-      "",
-      pathname + stringifySearchParams(searchParams)
-    );
+    window.history[method](null, '', pathname + stringifySearchParams(searchParams))
   }
 
-  next(action);
-};
+  next(action)
+}
 
 // --- Event listeners ------------------------------------
 
 export const routingListeners = store => {
-  window.addEventListener("popstate", () => {
+  window.addEventListener('popstate', () => {
     store.dispatch(
-      changePathname({
+      updatePathname({
         pathname: window.location.pathname,
-        searchParams: parseSearchParams(window.location.search)
-      })
-    );
-  });
-};
+        searchParams: parseSearchParams(window.location.search),
+      }),
+    )
+  })
+}
