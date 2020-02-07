@@ -4,7 +4,33 @@
  * @module
  */
 
-import { match } from 'path-to-regexp'
+import { compile, match } from 'path-to-regexp'
+
+/**
+ * Caches hold the routes that have been parsed to regex. These are ok to share
+ * across component instances because the same route string can always be
+ * matched against the same regex.
+ */
+const compileRegexRoutesCache = {}
+const matchRegexRoutesCache = {}
+
+/**
+ * Creates a URI for the passed route using the route params and search params
+ * @param {string} route Path pattern that will used as the pathname template, eg `tools/:library`
+ * @param {Object} routeParams Route parameter values that will be used for generated pathname
+ * @param {Object} searchParams Structured search param values
+ * @returns {string}
+ */
+export function createURI(route, routeParams = {}, searchParams = {}) {
+  if (!compileRegexRoutesCache[route]) {
+    compileRegexRoutesCache[route] = compile(route, { encode: encodeURIComponent })
+  }
+
+  const pathname = compileRegexRoutesCache[route](routeParams)
+  const search = stringifySearchParams(searchParams)
+
+  return pathname + search
+}
 
 /**
  * Matches the pathname against the route.
@@ -13,21 +39,14 @@ import { match } from 'path-to-regexp'
  * @returns {Object|null} Match details on match or null
  */
 export function matchRoute(pathname, route) {
-  if (!regexRoutesCache[route]) {
-    regexRoutesCache[route] = match(route, { decode: decodeURIComponent })
+  if (!matchRegexRoutesCache[route]) {
+    matchRegexRoutesCache[route] = match(route, { decode: decodeURIComponent })
   }
 
-  const pathMatch = regexRoutesCache[route](pathname)
+  const pathMatch = matchRegexRoutesCache[route](pathname)
 
   return pathMatch ? { params: pathMatch.params, pathname, route } : null
 }
-
-/**
- * Cache holds the paths that have been parsed to regex. This is ok to share
- * across component instances because the same path string can always be
- * matched against the same regex.
- */
-const regexRoutesCache = {}
 
 /**
  * Parses a search string into a key, value object set.
@@ -35,7 +54,7 @@ const regexRoutesCache = {}
  * @returns {Object} Structured search params
  */
 export function parseSearchParams(search = '') {
-  if (!URLSearchParams) return {}
+  if (typeof URLSearchParams === 'undefined') return {}
 
   const parsedSearchParams = {}
   const searchParams = new URLSearchParams(search)
@@ -52,7 +71,8 @@ export function parseSearchParams(search = '') {
  * @returns {string} Formatted search string
  */
 export function stringifySearchParams(params = {}) {
-  if (!URLSearchParams) return ''
+  if (typeof URLSearchParams === 'undefined') return ''
+
   const searchParams = new URLSearchParams()
 
   Object.keys(params).forEach(key => {
@@ -67,4 +87,5 @@ export function stringifySearchParams(params = {}) {
  *
  * - `path-to-regexp` should not be used with search params because they are
  *    not structured data -> pathname matching only
+ * - URLSearchParams automatically encodes and decodes all URI components
  */

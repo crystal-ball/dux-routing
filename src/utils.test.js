@@ -1,7 +1,31 @@
-import { matchRoute, parseSearchParams, stringifySearchParams } from './utils'
+import { createURI, matchRoute, parseSearchParams, stringifySearchParams } from './utils'
+
+describe('createURI()', () => {
+  test('when passed a simple route, then the correct uri is created', () => {
+    expect(createURI('/hecka/rad')).toBe('/hecka/rad')
+  })
+
+  test('when route params are passed, then the correct uri is created', () => {
+    expect(createURI('/rad/:status', { status: 'hecka' })).toBe('/rad/hecka')
+  })
+
+  test('when route params are passed, then they are encoded', () => {
+    expect(createURI('/rad/:package', { package: '@crystal-ball/webpack-base' })).toBe(
+      '/rad/%40crystal-ball%2Fwebpack-base',
+    )
+  })
+
+  test('when search params are passed, then the correct uri is created', () => {
+    expect(
+      createURI('/hecka/rad', null, {
+        '@hecka/rad': '@crystal-ball/webpack-base',
+      }),
+    ).toBe('/hecka/rad?%40hecka%2Frad=%40crystal-ball%2Fwebpack-base')
+  })
+})
 
 describe('matchRoute()', () => {
-  test('when passed a path that matches the route it returns data', () => {
+  test('when passed a path that matches the route, then match details are returned', () => {
     expect(matchRoute('/rad/hecka', '/rad/:status')).toEqual({
       params: { status: 'hecka' },
       pathname: '/rad/hecka',
@@ -38,6 +62,17 @@ describe('parseSearchParams()', () => {
   test('when an empty string is passed, an empty object is returned', () => {
     expect(parseSearchParams('')).toEqual({})
   })
+
+  test('when nothing is passed, an empty object is returned', () => {
+    expect(parseSearchParams()).toEqual({})
+  })
+
+  test('when URLSearchParams is null, an empty object is returned', () => {
+    const { URLSearchParams } = global
+    delete global.URLSearchParams
+    expect(parseSearchParams('?hecka=rad')).toEqual({})
+    global.URLSearchParams = URLSearchParams
+  })
 })
 
 describe('stringifySearchParams()', () => {
@@ -57,5 +92,12 @@ describe('stringifySearchParams()', () => {
 
   test('when nothing is passed, an empty string is returned', () => {
     expect(stringifySearchParams()).toBe('')
+  })
+
+  test('when URLSearchParams is null, an empty string is returned', () => {
+    const { URLSearchParams } = global
+    delete global.URLSearchParams
+    expect(stringifySearchParams({ hecka: 'rad' })).toEqual('')
+    global.URLSearchParams = URLSearchParams
   })
 })
