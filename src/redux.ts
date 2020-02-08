@@ -1,19 +1,31 @@
-// @ts-check
+/**
+ * @file Redux functions for interacting with routing state
+ */
+
 import { parseSearchParams, stringifySearchParams } from './utils'
+import { Params } from './types'
 
 // --- Action types ---------------------------------------
 
-/** @type {import('./types').PathNameUpdated} */
 export const PATHNAME_UPDATED = 'ROUTING/PATHNAME_UPDATED'
 
 // --- Action creators ------------------------------------
 
-/** @type {import('./types').updatePathname} */
+type UpdateMethods = 'pushState' | 'replaceState'
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
+/**
+ * Creates a pathname updated action object
+ */
 export function updatePathname({
   method = 'pushState',
   pathname,
   resetScroll = true,
   searchParams = {},
+}: {
+  method?: UpdateMethods
+  pathname: string
+  resetScroll?: boolean
+  searchParams?: Params
 }) {
   return {
     type: PATHNAME_UPDATED,
@@ -23,24 +35,21 @@ export function updatePathname({
       resetScroll,
       searchParams,
     },
-  }
+  } as const
 }
+/* eslint-enable @typescript-eslint/explicit-function-return-type */
 
 // --- Reducer --------------------------------------------
 
-/** @type {import('./types').RoutingState} */
 const initialState = {
   pathname: window?.location?.pathname || '/',
   searchParams: parseSearchParams(window?.location?.search),
 }
 
+type State = typeof initialState
+
 /* eslint-disable default-param-last */
-/**
- * @param {import('./types').RoutingState} state
- * @param {*} action
- * @returns {import('./types').RoutingState}
- */
-export default function reducer(state = initialState, action) {
+export default function reducer(state: State = initialState, action): State {
   if (action.type === PATHNAME_UPDATED) {
     const { pathname, searchParams } = action.payload
 
@@ -59,20 +68,21 @@ export default function reducer(state = initialState, action) {
 
   return state
 }
-/* eslint-disable default-param-last */
+/* eslint-enable default-param-last */
 
 // --- Selectors ------------------------------------------
 
-/** @returns {string} */
-export const getPathname = state => state.routing.pathname
-/** @returns {string} */
-export const getSearchParams = state => state.routing.searchParams
-/** @returns {import('./types').RoutingState} */
-export const getRouting = state => state.routing
+type Store = {
+  routing: State
+}
+
+export const getPathname = (state: Store): string => state.routing.pathname
+export const getSearchParams = (state: Store): Params => state.routing.searchParams
+export const getRouting = (state: Store): State => state.routing
 
 // --- Middleware -----------------------------------------
 
-export const routingMiddleware = store => next => action => {
+export const routingMiddleware = store => next => (action): void => {
   // Handle updating the url to match pathname changes
   if (action.type === PATHNAME_UPDATED) {
     const { method, pathname, resetScroll, searchParams } = action.payload
@@ -96,7 +106,7 @@ export const routingMiddleware = store => next => action => {
 
 // --- Event listeners ------------------------------------
 
-export const routingListeners = store => {
+export const routingListeners = (store): void => {
   window.addEventListener('popstate', () => {
     store.dispatch(
       updatePathname({

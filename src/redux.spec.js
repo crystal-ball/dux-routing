@@ -1,8 +1,8 @@
 import reducer, {
   PATHNAME_UPDATED,
   getPathname,
-  getSearchParams,
   getRouting,
+  getSearchParams,
   updatePathname,
 } from './redux'
 

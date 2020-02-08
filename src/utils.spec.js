@@ -6,6 +6,8 @@ import {
   stringifySearchParams,
 } from './utils'
 
+// --- createURI ------------------------------------------
+
 describe('createURI()', () => {
   test('when passed a simple route, then the correct uri is created', () => {
     expect(createURI('/hecka/rad')).toBe('/hecka/rad')
@@ -30,6 +32,8 @@ describe('createURI()', () => {
   })
 })
 
+// --- matchRoute -----------------------------------------
+
 describe('matchRoute()', () => {
   test('when passed a path that matches the route, then match details are returned', () => {
     expect(matchRoute('/rad/hecka', '/rad/:status')).toEqual({
@@ -51,6 +55,8 @@ describe('matchRoute()', () => {
     expect(matchRoute('/totally/rad', '/rad/:status')).toBe(null)
   })
 })
+
+// --- parseSearchParams ----------------------------------
 
 describe('parseSearchParams()', () => {
   test('when search params are passed, theyre decoded', () => {
@@ -80,6 +86,8 @@ describe('parseSearchParams()', () => {
     global.URLSearchParams = URLSearchParams
   })
 })
+
+// --- routeSwitch ----------------------------------------
 
 describe('routeSwitch()', () => {
   test('when called, then it returns the first match', () => {
@@ -120,6 +128,8 @@ describe('routeSwitch()', () => {
     expect(routeSwitch('/app/screen', testRoutes)).toBe(null)
   })
 })
+
+// --- stringifySearchParams ------------------------------
 
 describe('stringifySearchParams()', () => {
   test('when search params are passed, theyre encoded', () => {

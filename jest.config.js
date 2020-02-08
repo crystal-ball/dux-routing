@@ -1,4 +1,4 @@
-/* eslint-env node */
+'use strict'
 
 const { ENABLE_JEST_NOTIFICATIONS } = process.env
 

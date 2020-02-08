@@ -1,3 +1,5 @@
+'use strict'
+
 module.exports = {
   env: {
     /**
@@ -5,52 +7,42 @@ module.exports = {
      * doesn't support ESModules and operates directly on source code.
      */
     test: {
-      presets: ['@babel/preset-env'],
+      presets: ['@babel/preset-env', '@babel/preset-typescript'],
     },
 
     // Publish targets
     // ---------------------------------------------------------------------------
 
-    // CommonJS - ES5 syntax with commonJS modules
+    // --- CommonJS - ES5 syntax with commonJS modules
     common: {
-      presets: ['@babel/preset-env'],
+      presets: ['@babel/preset-env', '@babel/preset-typescript'],
       plugins: [
-        '@babel/plugin-transform-modules-commonjs',
         [
           '@babel/plugin-transform-runtime',
           // https://github.com/babel/babel/issues/10261
-          { version: require('@babel/helpers/package.json').version },
+          { version: require('@babel/helpers/package.json').version }, // eslint-disable-line
         ],
       ],
     },
-    // ESM - ES5 syntax with ESModules
+
+    // --- ESM - ES5 syntax with ESModules
     esmodules: {
-      presets: [['@babel/preset-env', { modules: false }]],
+      presets: [['@babel/preset-env', { modules: false }], '@babel/preset-typescript'],
       plugins: [
         [
           '@babel/plugin-transform-runtime',
           {
             useESModules: true,
             // https://github.com/babel/babel/issues/10261
-            version: require('@babel/helpers/package.json').version,
-          },
-        ],
-      ],
-    },
-    // Next - Transpiled to stage 4 for package.esnext
-    next: {
-      plugins: [
-        [
-          '@babel/plugin-transform-runtime',
-          {
-            useESModules: true,
-            // https://github.com/babel/babel/issues/10261
-            version: require('@babel/helpers/package.json').version,
+            version: require('@babel/helpers/package.json').version, // eslint-disable-line
           },
         ],
       ],
     },
 
-    // ℹ️ Local dev uses the default Storybook Babel configs
+    // --- Next - Transpiled to stage 4 for package.esnext
+    next: {
+      presets: ['@babel/preset-typescript'],
+    },
   },
 }
