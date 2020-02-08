@@ -1,8 +1,9 @@
-import reducer, {
+import {
   PATHNAME_UPDATED,
   getPathname,
   getRouting,
   getSearchParams,
+  reducer,
   updatePathname,
 } from './redux'
 

@@ -49,7 +49,7 @@ const initialState = {
 type State = typeof initialState
 
 /* eslint-disable default-param-last */
-export default function reducer(state: State = initialState, action): State {
+export function reducer(state: State = initialState, action): State {
   if (action.type === PATHNAME_UPDATED) {
     const { pathname, searchParams } = action.payload
 
