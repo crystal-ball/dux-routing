@@ -7,17 +7,18 @@ import { Params } from './types'
 
 export type MatchDetails = {
   /** Matched route param values by route param id */
-  params: { [key: string]: string }
+  params: Params
   /** Pathname used in match */
   pathname: string
   /** Route used in match */
   route: string
+  [key: string]: any // eslint-disable-line
 }
 
 export type RouteConfig = {
   /** Route that pathname is tested against */
   route: string
-  [key: string]: string
+  [key: string]: any // eslint-disable-line
 }
 
 // --- Search params --------------------------------------

@@ -9,45 +9,37 @@
 
 ## Setup
 
-**1. Include the routing reducer in your root reducer.**
-
-_(The routing reducer exposes the current routing state of your application)_
+Setup requires adding 3 handlers to your store setup: a reducer, a middleware,
+and a set of event listeners.
 
 ```javascript
 import { combineReducers } from 'redux'
-import { routingReducer as routing } from 'dux-routing'
+import {
+  reducer as routing,
+  routingMiddleware,
+  setupRoutingListeners,
+} from 'dux-routing'
 
 const rootReducer = combineReducers({
-  // ... reducers
+  // 1. Add routing reducer
   routing,
-  // ... more reducers
 })
-```
-
-**2. Include the routing middleware in your store setup.**
-
-_(The routing middleware watches for actions with routing changes and manages
-updating the url to match)_
-
-```javascript
-import { routingMiddleware } from 'dux-routing'
 
 const store = configureStore({
   reducer: rootReducer,
+  // 2. Add routing middleware
   middleware: [routingMiddleware],
 })
+
+// 3. Setup routing listeners
+setupRoutingListeners(store)
 ```
 
-**3. Setup event listeners for browser navigation events.**
-
-_(The routing ßlisteners will dispatch events to the store when users navigate
-using browser back and forward buttons)_
-
-```javascript
-import { routingListeners } from 'dux-routing'
-
-routingListeners(store)
-```
+1. The routing reducer exposes the current routing state of your application
+2. The routing middleware watches for actions with routing changes and manages
+   updating the url to match.
+3. The routing listeners will dispatch events to the store when users navigate
+   using browser back and forward buttons
 
 ## Library conventions
 

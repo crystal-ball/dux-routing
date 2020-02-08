@@ -13,9 +13,7 @@ export const PATHNAME_UPDATED = 'ROUTING/PATHNAME_UPDATED'
 
 type UpdateMethods = 'pushState' | 'replaceState'
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-/**
- * Creates a pathname updated action object
- */
+/** Creates a pathname updated action object */
 export function updatePathname({
   method = 'pushState',
   pathname,
@@ -49,6 +47,7 @@ const initialState = {
 type State = typeof initialState
 
 /* eslint-disable default-param-last */
+/** Routing reducer manages the current pathname and search params state */
 export function reducer(state: State = initialState, action): State {
   if (action.type === PATHNAME_UPDATED) {
     const { pathname, searchParams } = action.payload
@@ -76,37 +75,55 @@ type Store = {
   routing: State
 }
 
-export const getPathname = (state: Store): string => state.routing.pathname
-export const getSearchParams = (state: Store): Params => state.routing.searchParams
-export const getRouting = (state: Store): State => state.routing
+/** Returns the current routing pathname */
+export function getPathname(state: Store): string {
+  return state.routing.pathname
+}
+/** Returns the current routing search params */
+export function getSearchParams(state: Store): Params {
+  return state.routing.searchParams
+}
+/** Returns the current routing state */
+export function getRouting(state: Store): State {
+  return state.routing
+}
 
 // --- Middleware -----------------------------------------
 
-export const routingMiddleware = store => next => (action): void => {
-  // Handle updating the url to match pathname changes
-  if (action.type === PATHNAME_UPDATED) {
-    const { method, pathname, resetScroll, searchParams } = action.payload
+/**
+ * Store middleware manages syncing the browser URL on change of routing state
+ */
+export function routingMiddleware(store) {
+  return next => (action): void => {
+    // Handle updating the url to match pathname changes
+    if (action.type === PATHNAME_UPDATED) {
+      const { method, pathname, resetScroll, searchParams } = action.payload
 
-    window.history[method](null, '', pathname + stringifySearchParams(searchParams))
+      window.history[method](null, '', pathname + stringifySearchParams(searchParams))
 
-    // Match browser default behavior by resetting scroll to top of body
-    if (resetScroll) document.body.scrollTop = 0
+      // Match browser default behavior by resetting scroll to top of body
+      if (resetScroll) document.body.scrollTop = 0
+    }
+
+    // Handle updating the url to match search param changes
+    if (action.meta?.searchParams) {
+      const { method = 'replaceState', searchParams } = action.meta
+      const pathname = getPathname(store.getState())
+
+      window.history[method](null, '', pathname + stringifySearchParams(searchParams))
+    }
+
+    next(action)
   }
-
-  // Handle updating the url to match search param changes
-  if (action.meta?.searchParams) {
-    const { method = 'replaceState', searchParams } = action.meta
-    const pathname = getPathname(store.getState())
-
-    window.history[method](null, '', pathname + stringifySearchParams(searchParams))
-  }
-
-  next(action)
 }
 
 // --- Event listeners ------------------------------------
 
-export const routingListeners = (store): void => {
+/**
+ * Routing listeners manage dispatching pathname change action on browser
+ * popstate events.
+ */
+export function setupRoutingListeners(store): void {
   window.addEventListener('popstate', () => {
     store.dispatch(
       updatePathname({
