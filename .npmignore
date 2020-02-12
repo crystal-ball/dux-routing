@@ -3,8 +3,8 @@
 
 # Source
 # -------------------------------------
-src
 public
+src
 
 # Output
 # -------------------------------------
@@ -23,12 +23,14 @@ false
 .storybook
 .vscode
 .cz-config.js
+.eslintignore
 .eslintrc.js
 .prettierignore
 .prettierrc
 .travis.yml
 babel.config.js
 jsconfig.json
+renovate.json
 tsconfig.json
 webpack.config.js
 
