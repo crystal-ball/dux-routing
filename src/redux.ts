@@ -94,7 +94,7 @@ export function getRouting(state: Store): State {
  * Store middleware manages syncing the browser URL on change of routing state
  */
 export function routingMiddleware(store) {
-  return next => (action): void => {
+  return (next) => (action): void => {
     // Handle updating the url to match pathname changes
     if (action.type === PATHNAME_UPDATED) {
       const { method, pathname, resetScroll, searchParams } = action.payload
