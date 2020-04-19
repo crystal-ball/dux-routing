@@ -31,7 +31,7 @@ export function stringifySearchParams(params: Params = {}): string {
 
   const searchParams = new URLSearchParams()
 
-  Object.keys(params).forEach(key => {
+  Object.keys(params).forEach((key) => {
     searchParams.set(key, params[key])
   })
   const stringifiedParams = searchParams.toString()
