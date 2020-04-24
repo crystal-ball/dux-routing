@@ -1,0 +1,52 @@
+name: CI/CD
+on: [push]
+
+jobs:
+  # --- Package testing ✅
+  test:
+    name: Continuous Integration
+    if: contains(github.event.head_commit.message, 'skip ci') == false
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12.16'
+      - name: Install
+        run: CI=true npm install
+      - name: Code Climate - Setup
+        run: |
+          curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+          chmod +x ./cc-test-reporter
+          ./cc-test-reporter before-build
+      - name: Test
+        run: npm test
+      # Upload test code coverage report to Code Climate (branch must be explicitly set)
+      - name: Code Climate - Report
+        if: success()
+        run: |
+          export GIT_BRANCH="${GIT_BRANCH:-${GITHUB_REF:11}}"
+          ./cc-test-reporter after-build
+        env:
+          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+          GIT_BRANCH: ${{ github.head_ref }}
+  # --- Package publishing 🚀
+  # publish:
+  #   name: Continuous Deployment
+  #   if: github.ref == 'refs/heads/master'
+  #   needs: test
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v1
+  #     - name: Setup Node.js
+  #       uses: actions/setup-node@v1
+  #       with:
+  #         node-version: '12.16'
+  #     - name: Install
+  #       run: CI=true npm install
+  #     - name: Semantic Release
+  #       run: npx semantic-release
+  #       env:
+  #         GH_TOKEN: ${{ secrets.SEMANTIC_GH_TOKEN }}
+  #         NPM_TOKEN: ${{ secrets.SEMANTIC_NPM_TOKEN }}
