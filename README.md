@@ -1,12 +1,14 @@
 <div align="right">
-  <h1 align="right">dux-routing</h1>
+  <h1 align="right">
+    <img height=75 src="./docs/assets/readme-header.png" alt="webpack base">
+  </h1>
 
   <!-- prettier-ignore-start -->
   <a href="https://www.npmjs.com/package/dux-routing">
     <img src="https://img.shields.io/npm/v/dux-routing" alt="Package version" valign="text-top"/>
   </a>
-  <a href="https://www.npmjs.com/package/dux-routingg">
-    <img src="https://img.shields.io/npm/dt/dux-routingg?color=blue" alt="NPM downloads" valign="text-top" />
+  <a href="https://www.npmjs.com/package/dux-routing">
+    <img src="https://img.shields.io/npm/dt/dux-routing?color=blue" alt="NPM downloads" valign="text-top" />
   </a>
   <a href="https://github.com/crystal-ball/dux-routing/actions?workflow=CI%2FCD">
     <img src="https://github.com/crystal-ball/dux-routing/workflows/CI%2FCD/badge.svg" alt="Build status" valign="text-top" />
