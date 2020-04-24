@@ -1,6 +1,6 @@
 {
   "name": "dux-routing",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "All in Redux routing solution",
   "main": "lib/index.js",
   "module": "es/index.js",
