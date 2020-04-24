@@ -14,6 +14,13 @@ with [@crystal-ball/semantic-release-base](https://github.com/crystal-ball/seman
 > - 🛠 - Fixes
 
 
+## [0.5.0](https://github.com/crystal-ball/dux-routing/compare/v0.4.0...v0.5.0) (2020-04-24)
+
+
+#### ✨ Update
+
+* Add source code comment 📝 (#15)([8870408](https://github.com/crystal-ball/dux-routing/commit/88704082f75f07ec900e5e0bb435c6a5ff829f83)), closes [#15](https://github.com/crystal-ball/dux-routing/issue/15)
+
 ## [0.4.0](https://github.com/crystal-ball/dux-routing/compare/v0.3.0...v0.4.0) (2020-04-24)
 
 
