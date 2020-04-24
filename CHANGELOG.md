@@ -42,17 +42,3 @@ with [@crystal-ball/semantic-release-base](https://github.com/crystal-ball/seman
 * Add Code of Conduct 📝([5cda169](https://github.com/crystal-ball/dux-routing/commit/5cda1696d10623917de689d6496390a65cfdb288))
 * Add README header 📝([ddb1b14](https://github.com/crystal-ball/dux-routing/commit/ddb1b14bca44a33e4e8494cd2ce4af9bf2c7c7b9))
 
-# dux-routing changelog
-
-This project strictly adheres to semver and will err on the side of releasing majors when
-changes could possibly introduce breaking changes. This changelog is dynamically generated
-with [Semantic Release](https://semantic-release.gitbook.io/semantic-release/) configured
-with [@crystal-ball/semantic-release-base](https://github.com/crystal-ball/semantic-release-base).
-
-> Changelog tags
->
-> - 💥 - Breaking change
-> - 🔖 - Release notes
-> - 💖 - New feature
-> - ✨ - Updates
-> - 🛠 - Fixes
