@@ -31,22 +31,23 @@ jobs:
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
           GIT_BRANCH: ${{ github.head_ref }}
+
   # --- Package publishing 🚀
-  # publish:
-  #   name: Continuous Deployment
-  #   if: github.ref == 'refs/heads/master'
-  #   needs: test
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v1
-  #     - name: Setup Node.js
-  #       uses: actions/setup-node@v1
-  #       with:
-  #         node-version: '12.16'
-  #     - name: Install
-  #       run: CI=true npm install
-  #     - name: Semantic Release
-  #       run: npx semantic-release
-  #       env:
-  #         GH_TOKEN: ${{ secrets.SEMANTIC_GH_TOKEN }}
-  #         NPM_TOKEN: ${{ secrets.SEMANTIC_NPM_TOKEN }}
+  publish:
+    name: Continuous Deployment
+    if: github.ref == 'refs/heads/master'
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12.16'
+      - name: Install
+        run: CI=true npm install
+      - name: Semantic Release
+        run: npx semantic-release
+        env:
+          GH_TOKEN: ${{ secrets.SEMANTIC_GH_TOKEN }}
+          NPM_TOKEN: ${{ secrets.SEMANTIC_NPM_TOKEN }}
