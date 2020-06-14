@@ -1,9 +1,10 @@
 'use strict'
 
-module.exports = {
-  root: true,
-  extends: ['eloquence/node', 'eloquence/typescript'],
-  parserOptions: {
-    project: './tsconfig.json',
+const eloquence = require('eslint-config-eloquence')
+
+module.exports = eloquence({
+  target: 'node',
+  rules: {
+    'node/no-unsupported-features/node-builtins': 'off',
   },
-}
+})
