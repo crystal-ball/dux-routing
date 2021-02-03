@@ -41,11 +41,11 @@
     "path-to-regexp": "6"
   },
   "devDependencies": {
-    "@babel/cli": "7.12.10",
-    "@babel/core": "7.12.10",
-    "@babel/plugin-transform-runtime": "7.12.10",
-    "@babel/preset-env": "7.12.11",
-    "@babel/preset-typescript": "7.12.7",
+    "@babel/cli": "7.12.13",
+    "@babel/core": "7.12.13",
+    "@babel/plugin-transform-runtime": "7.12.13",
+    "@babel/preset-env": "7.12.13",
+    "@babel/preset-typescript": "7.12.13",
     "@crystal-ball/commitizen-base": "2.9.0",
     "@crystal-ball/prettier-base": "2.6.0",
     "@crystal-ball/semantic-release-base": "2.25.0",
